@@ -37,8 +37,9 @@ const rawQuestionList = [
   },
 ];
 const List: FC = () => {
-  const [questionList, setQuestionList] = useState(rawQuestionList);
+  const [questionList] = useState(rawQuestionList);
   useTitle("我的问卷");
+
   return (
     <>
       <div className={styles.header}>

@@ -1,7 +1,7 @@
-import {FC} from "react";
+import { FC } from "react";
 
-const Star:  FC = () => {
+const Star: FC = () => {
   return <div>trash</div>;
 };
 
-export default Star; 
+export default Star;

@@ -1,7 +1,7 @@
 import { FC } from "react";
 
 const Star: FC = () => {
-  return <div>trash</div>;
+  return <div>star</div>;
 };
 
 export default Star;

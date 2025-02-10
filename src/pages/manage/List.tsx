@@ -1,13 +1,14 @@
 import { FC, useState } from "react";
-import styles from "./List.module.scss";
+import styles from "./Common.module.scss";
 import { useTitle } from "ahooks";
+import { Typography } from "antd";
 import QuestionCard from "../../components/QuestionCard";
 const rawQuestionList = [
   {
     _id: "q1",
     title: "问卷1",
     isPublished: true,
-    isStar: false,
+    isStar: true,
     answerCount: 5,
     createdAt: "3月10日13:00",
   },
@@ -37,6 +38,7 @@ const rawQuestionList = [
   },
 ];
 const List: FC = () => {
+  const { Title } = Typography;
   const [questionList] = useState(rawQuestionList);
   useTitle("我的问卷");
 
@@ -44,17 +46,19 @@ const List: FC = () => {
     <>
       <div className={styles.header}>
         <div className={styles.left}>
-          <h3>我的问卷</h3>
+          <Title level={3}>我的问卷</Title>
         </div>
         <div className={styles.right}>搜索</div>
       </div>
       <div className={styles.content}>
-        {questionList.map((q) => {
-          const { _id } = q;
-          return <QuestionCard key={_id} {...q} />;
-        })}
+        {/* 问卷列表 */}
+        {questionList.length > 0 &&
+          questionList.map((q) => {
+            const { _id } = q;
+            return <QuestionCard key={_id} {...q} />;
+          })}
       </div>
-      <div className={styles.footer}>footer</div>
+      <div className={styles.footer}>上滑加载更多</div>
     </>
   );
 };

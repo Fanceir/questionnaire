@@ -78,3 +78,9 @@ const router = createBrowserRouter([
 ]);
 
 export default router;
+
+//------  常用的常量
+export const LOGIN_PATHNAME = "/login";
+export const REGISTER_PATHNAME = "/register";
+export const HOME_PATHNAME = "/";
+export const MANAGE_INDEX_PATHNAME = "/manage";

@@ -1,55 +1,77 @@
 import { useTitle } from "ahooks";
 import { FC, useState } from "react";
 import styles from "./common.module.scss";
-import { Typography, Button, Space, Empty, Table, Tag, Modal } from "antd";
-import ListSearch from "@/components/ListSearch";
-
+import {
+  Typography,
+  Spin,
+  Empty,
+  Button,
+  Space,
+  Table,
+  Tag,
+  Modal,
+} from "antd";
+import ListSearch from "../../components/ListSearch";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { useLoadQuestionListData } from "@/Hooks/useLoadQuestionListData";
 const { Title } = Typography;
 const { confirm } = Modal;
-const ListQuestionList = [
-  {
-    _id: "q1",
-    title: "问卷1",
-    isPublished: true,
-    isStar: true,
-    answerCount: 5,
-    createdAt: "3月10日13:00",
-  },
-  {
-    _id: "q2",
-    title: "问卷2",
-    isPublished: false,
-    isStar: false,
-    answerCount: 51,
-    createdAt: "3月15日13:00",
-  },
-  {
-    _id: "q3",
-    title: "问卷2",
-    isPublished: false,
-    isStar: false,
-    answerCount: 123,
-    createdAt: "3月17日13:50",
-  },
-  {
-    _id: "q4",
-    title: "问卷2",
-    isPublished: true,
-    isStar: false,
-    answerCount: 5,
-    createdAt: "3月12日14:02",
-  },
-];
+
+type ListItemType = {
+  _id: string;
+  title: string;
+  isPublished: boolean;
+  isStar: boolean;
+  answerCount: number;
+  createdAt: string;
+  isDeleted: boolean;
+};
 
 const Trash: FC = () => {
-  useTitle("Easy问卷 - 回收站");
+  useTitle("小慕问卷 - 回收站");
 
-  const [questionList] = useState(ListQuestionList);
+  // 改造成useRequest
+  const { loading, data } = useLoadQuestionListData({ isDeleted: true });
+
+  let list: ListItemType[] = [];
+  let total = 0;
+  if (data) {
+    list = data.list;
+    total = data.total;
+  }
+
+  // 记录选中的 id
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+
+  function del() {
+    confirm({
+      title: "确认彻底删除该问卷？",
+      icon: <ExclamationCircleOutlined />,
+      content: "删除以后不可以找回",
+      onOk: deleteQuestion,
+    });
+  }
+
+  const deleteQuestion = async () => {
+    console.log(selectedIds);
+    setSelectedIds([]);
+    await new Promise((r) => {
+      setTimeout(() => {
+        r(1);
+      }, 4000);
+    });
+  };
+
+  const recover = () => {
+    console.log(selectedIds);
+    setSelectedIds([]);
+  };
+
   const tableColumns = [
     {
       title: "标题",
       dataIndex: "title",
+      // key: 'title', // 循环列的 key ，它会默认取 dataIndex 的值
     },
     {
       title: "是否发布",
@@ -71,50 +93,44 @@ const Trash: FC = () => {
       dataIndex: "createAt",
     },
   ];
-  const handleDelete = () => {
-    confirm({
-      title: "确定删除这些问卷吗?",
-      content: "删除后不可恢复",
-      cancelText: "取消",
-      okText: "删除",
-      onOk() {
-        alert(`删除 ${JSON.stringify(selectedIds)}`);
-      },
-      onCancel() {
-        console.log("Cancel");
-      },
-    });
-  };
+
+  // 可以把 JSX 片段定义为一个变量
   const TableElem = (
     <>
       <div style={{ marginBottom: "16px" }}>
         <Space>
-          <Button type="primary" disabled={selectedIds.length === 0}>
+          <Button
+            type="primary"
+            disabled={selectedIds.length === 0}
+            onClick={recover}
+          >
             恢复
           </Button>
-          <Button
-            danger
-            disabled={selectedIds.length === 0}
-            onClick={handleDelete}
-          >
-            删除
+          <Button danger disabled={selectedIds.length === 0} onClick={del}>
+            彻底删除
           </Button>
         </Space>
       </div>
-      <Table
-        columns={tableColumns}
-        dataSource={questionList}
-        rowKey={(q) => q._id}
-        pagination={false}
-        rowSelection={{
-          type: "checkbox",
-          onChange: (selectedRowKeys) => {
-            setSelectedIds(selectedRowKeys as string[]);
-          },
-        }}
-      />
+      <div style={{ border: "1px solid #e8e8e8" }}>
+        <Table
+          dataSource={list}
+          columns={tableColumns}
+          pagination={false}
+          rowKey={(q) => q._id}
+          rowSelection={{
+            type: "checkbox",
+            hideSelectAll: false,
+            selectedRowKeys: selectedIds,
+            onChange: (selectedRowKeys) => {
+              // console.log(selectedRowKeys)
+              setSelectedIds(selectedRowKeys as string[]);
+            },
+          }}
+        />
+      </div>
     </>
   );
+
   return (
     <>
       <div className={styles.header}>
@@ -126,10 +142,15 @@ const Trash: FC = () => {
         </div>
       </div>
       <div className={styles.content}>
-        {questionList.length === 0 && <Empty description="暂无数据" />}
-        {questionList.length > 0 && TableElem}
+        {loading && (
+          <div style={{ textAlign: "center" }}>
+            <Spin></Spin>
+          </div>
+        )}
+        {!loading && list.length === 0 && <Empty description="暂无数据" />}
+        {list.length > 0 && TableElem}
       </div>
-      <div className={styles.footer}></div>
+      <div className={styles.footer}>分页 {total}</div>
     </>
   );
 };

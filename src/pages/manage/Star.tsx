@@ -5,12 +5,13 @@ import { Typography, Spin, Empty } from "antd";
 import QuestionCard from "@/components/QuestionCard";
 import ListSearch from "@/components/ListSearch";
 import { useLoadQuestionListData } from "@/Hooks/useLoadQuestionListData";
+import ListPage from "@/components/ListPage";
 const { Title } = Typography;
 
 const Star: FC = () => {
   useTitle("Easy问卷 - 星标问卷");
   const { data = {}, loading } = useLoadQuestionListData({ isStar: true });
-  const { list = [] } = data;
+  const { list = [], total } = data;
 
   return (
     <>
@@ -39,7 +40,9 @@ const Star: FC = () => {
             return <QuestionCard key={_id} {...q} />;
           })}
       </div>
-      <div className={styles.footer}>分页</div>
+      <div className={styles.footer}>
+        <ListPage total={total} />
+      </div>
     </>
   );
 };

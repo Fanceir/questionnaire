@@ -14,6 +14,7 @@ import {
 import ListSearch from "../../components/ListSearch";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { useLoadQuestionListData } from "@/Hooks/useLoadQuestionListData";
+import ListPage from "@/components/ListPage";
 const { Title } = Typography;
 const { confirm } = Modal;
 
@@ -47,6 +48,8 @@ const Trash: FC = () => {
     confirm({
       title: "确认彻底删除该问卷？",
       icon: <ExclamationCircleOutlined />,
+      okText: "确认",
+      cancelText: "取消",
       content: "删除以后不可以找回",
       onOk: deleteQuestion,
     });
@@ -150,7 +153,9 @@ const Trash: FC = () => {
         {!loading && list.length === 0 && <Empty description="暂无数据" />}
         {list.length > 0 && TableElem}
       </div>
-      <div className={styles.footer}>分页 {total}</div>
+      <div className={styles.footer}>
+        <ListPage total={total} />
+      </div>
     </>
   );
 };

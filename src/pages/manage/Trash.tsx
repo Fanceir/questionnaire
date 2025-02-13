@@ -1,4 +1,4 @@
-import { useTitle } from "ahooks";
+import { useRequest, useTitle } from "ahooks";
 import { FC, useState } from "react";
 import styles from "./common.module.scss";
 import {
@@ -10,11 +10,13 @@ import {
   Table,
   Tag,
   Modal,
+  message,
 } from "antd";
 import ListSearch from "../../components/ListSearch";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { useLoadQuestionListData } from "@/Hooks/useLoadQuestionListData";
 import ListPage from "@/components/ListPage";
+import { deleteQuestionService, updateQuestionService } from "@/services/question";
 const { Title } = Typography;
 const { confirm } = Modal;
 
@@ -29,10 +31,12 @@ type ListItemType = {
 };
 
 const Trash: FC = () => {
-  useTitle("小慕问卷 - 回收站");
+  useTitle("Easy问卷 - 回收站");
 
   // 改造成useRequest
-  const { loading, data } = useLoadQuestionListData({ isDeleted: true });
+  const { loading, data, refresh } = useLoadQuestionListData({
+    isDeleted: true,
+  });
 
   let list: ListItemType[] = [];
   let total = 0;
@@ -51,24 +55,45 @@ const Trash: FC = () => {
       okText: "确认",
       cancelText: "取消",
       content: "删除以后不可以找回",
-      onOk: deleteQuestion,
+      onOk: deleteQuestions,
     });
   }
 
-  const deleteQuestion = async () => {
-    console.log(selectedIds);
+  const recover = () => {
+    recoverQuestion();
     setSelectedIds([]);
-    await new Promise((r) => {
-      setTimeout(() => {
-        r(1);
-      }, 4000);
-    });
   };
 
-  const recover = () => {
-    console.log(selectedIds);
-    setSelectedIds([]);
-  };
+  //恢复
+  const { run: recoverQuestion } = useRequest(
+    async () => {
+      for await (const id of selectedIds) {
+        const data = await updateQuestionService(id, { isDeleted: false });
+        return data;
+      }
+    },
+    {
+      manual: true,
+      debounceWait: 500,
+      onSuccess() {
+        message.success("恢复成功");
+        refresh();
+      },
+    },
+  );
+
+  // 删除
+  const { run: deleteQuestions } = useRequest(
+    async () => await deleteQuestionService(selectedIds),
+    {
+      manual: true,
+      debounceWait: 500,
+      onSuccess() {
+        message.success("删除成功");
+        refresh();
+      },
+    },
+  );
 
   const tableColumns = [
     {

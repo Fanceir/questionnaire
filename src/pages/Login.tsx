@@ -1,10 +1,20 @@
 import { FC, useEffect } from "react";
-import { useTitle } from "ahooks";
+import { useRequest, useTitle } from "ahooks";
 import styles from "./Login.module.scss";
-import { Typography, Space, Form, Input, Button, Checkbox } from "antd";
+import {
+  Typography,
+  Space,
+  Form,
+  Input,
+  Button,
+  Checkbox,
+  message,
+} from "antd";
 import { UserAddOutlined } from "@ant-design/icons";
-import { REGISTER_PATHNAME } from "../router";
-import { Link } from "react-router-dom";
+import { MANAGE_INDEX_PATHNAME, REGISTER_PATHNAME } from "../router";
+import { Link, useNavigate } from "react-router-dom";
+import { loginService } from "@/services/user";
+import { setToken } from "@/utils/user-token";
 
 const { Title } = Typography;
 const USERNAME_KEY = "USERNAME";
@@ -23,10 +33,29 @@ const getUserFromStorage = () => {
   return { username, password };
 };
 const Login: FC = () => {
+  const nav = useNavigate();
+  //登录逻辑
+  const { run: handleLogin } = useRequest(
+    async (username: string, password: string) => {
+      const data = await loginService(username, password);
+      return data;
+    },
+    {
+      manual: true,
+      onSuccess(result) {
+        const { token } = result;
+        setToken(token);
+        message.success("登录成功");
+        nav(MANAGE_INDEX_PATHNAME);
+      },
+    },
+  );
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onFinish = (values: any) => {
     console.log("Success:", values);
     const { username, password } = values || {};
+    handleLogin(username, password);
     if (values.remember) {
       rememberUser(username, password);
     } else {

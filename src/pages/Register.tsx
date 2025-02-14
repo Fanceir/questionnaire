@@ -1,15 +1,31 @@
 import { FC } from "react";
-import { Typography, Space, Form, Input, Button } from "antd";
+import { Typography, Space, Form, Input, Button, message } from "antd";
 import { UserAddOutlined } from "@ant-design/icons";
 import styles from "./Register.module.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LOGIN_PATHNAME } from "@/router";
+import { useRequest } from "ahooks";
+import { registerService } from "@/services/user";
 const Register: FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onFinish = (values: any) => {
-    console.log("Success:", values);
+    handleRegister(values);
   };
+  const nav = useNavigate();
   const { Title } = Typography;
+  const { run: handleRegister } = useRequest(
+    async (values) => {
+      const { username, password, nickname } = values;
+      await registerService(username, password, nickname);
+    },
+    {
+      manual: true,
+      onSuccess() {
+        message.success("注册成功");
+        nav(LOGIN_PATHNAME);
+      },
+    },
+  );
   return (
     <div className={styles.container}>
       <div>
@@ -73,7 +89,7 @@ const Register: FC = () => {
           <Form.Item
             label="昵称"
             name="nickname"
-            rules={[{ required: true, message: "请输入昵称" }]}
+            rules={[{ required: false, message: "请输入昵称" }]}
           >
             <Input />
           </Form.Item>

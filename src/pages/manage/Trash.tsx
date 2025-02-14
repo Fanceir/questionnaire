@@ -16,7 +16,10 @@ import ListSearch from "../../components/ListSearch";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { useLoadQuestionListData } from "@/Hooks/useLoadQuestionListData";
 import ListPage from "@/components/ListPage";
-import { deleteQuestionService, updateQuestionService } from "@/services/question";
+import {
+  deleteQuestionService,
+  updateQuestionService,
+} from "@/services/question";
 const { Title } = Typography;
 const { confirm } = Modal;
 

@@ -1,5 +1,6 @@
 import useLoadUserData from "@/Hooks/useLoadUserData";
 import useNavPage from "@/Hooks/useNavPage";
+import { Spin } from "antd";
 import { FC } from "react";
 import { Outlet } from "react-router-dom";
 const QuestionLayout: FC = () => {
@@ -7,8 +8,15 @@ const QuestionLayout: FC = () => {
   useNavPage(waitingUserData);
   return (
     <>
-      <div>QuestionLayout</div>
-      <div>{!waitingUserData && <Outlet />}</div>
+      <div style={{ height: "100vh" }}>
+        {waitingUserData ? (
+          <div style={{ textAlign: "center", marginTop: "60px" }}>
+            <Spin />
+          </div>
+        ) : (
+          <Outlet />
+        )}
+      </div>
     </>
   );
 };

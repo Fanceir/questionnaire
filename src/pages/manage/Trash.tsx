@@ -1,6 +1,6 @@
 import { useRequest, useTitle } from "ahooks";
 import { FC, useState } from "react";
-import styles from "./common.module.scss";
+import styles from "./Common.module.scss";
 import {
   Typography,
   Spin,

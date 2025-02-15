@@ -1,6 +1,6 @@
 import { useTitle } from "ahooks";
 import { FC } from "react";
-import styles from "./common.module.scss";
+import styles from "./Common.module.scss";
 import { Typography, Spin, Empty } from "antd";
 import QuestionCard from "@/components/QuestionCard";
 import ListSearch from "@/components/ListSearch";

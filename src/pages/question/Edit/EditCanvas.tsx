@@ -1,21 +1,30 @@
 import { FC } from "react";
 import styles from "./EditCanvas.module.scss";
+
+import useGetComponentInfo from "@/Hooks/useGetComponentInfo";
 // 临时引入
-import QuestionTitle from "@/components/QuestionComponents/QuestionTitle/Component";
-import QuestionInput from "@/components/QuestionComponents/QuestionInput/Component";
-const EditCanvas: FC = () => {
+
+import { Spin } from "antd";
+type PropsType = {
+  loading: boolean;
+};
+
+const EditCanvas: FC<PropsType> = ({ loading }) => {
+  const { componentList } = useGetComponentInfo();
+  console.log(componentList);
+  if (loading)
+    return (
+      <div style={{ textAlign: "center", marginTop: "24px" }}>
+        <Spin />
+      </div>
+    );
   return (
     <div className={styles.canvas}>
-      <div className={styles["component-wrapper"]}>
-        <div className={styles.component}>
-          <QuestionTitle />
-        </div>
-      </div>
-      <div className={styles["component-wrapper"]}>
-        <div className={styles.component}>
-          <QuestionInput />
-        </div>
-      </div>
+      {componentList.map((item) => {
+        const { fe_id } = item;
+
+        return <div key={fe_id}></div>;
+      })}
     </div>
   );
 };

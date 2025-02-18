@@ -7,9 +7,11 @@ export type ComponentInfoType = {
   props: ComponentPropsType;
 };
 export type ComponentStateType = {
+  selectedId: string;
   componentList: Array<ComponentInfoType>;
 };
 const INIT_STATE: ComponentStateType = {
+  selectedId: "",
   componentList: [],
 };
 export const componentSlice = createSlice({
@@ -23,7 +25,15 @@ export const componentSlice = createSlice({
     ) => {
       return action.payload;
     },
+
+    // 修改 selectedid
+    changeSelectedId: (
+      draft: ComponentStateType,
+      action: PayloadAction<string>,
+    ) => {
+      draft.selectedId = action.payload;
+    },
   },
 });
-export const { resetComponents } = componentSlice.actions;
+export const { resetComponents, changeSelectedId } = componentSlice.actions;
 export default componentSlice.reducer;

@@ -1,16 +1,19 @@
-import { FC } from "react";
+import { FC, MouseEvent } from "react";
 import styles from "./EditCanvas.module.scss";
 import { getComponentConfByType } from "@/components/QuestionComponents";
 import useGetComponentInfo from "@/Hooks/useGetComponentInfo";
 // 临时引入
-import { ComponentInfoType } from "@/store/componentReducer";
+import { changeSelectedId, ComponentInfoType } from "@/store/componentReducer";
 import { Spin } from "antd";
+import { useDispatch } from "react-redux";
+import classNames from "classnames";
+
 type PropsType = {
   loading: boolean;
 };
 
 function genComponent(componentInfo: ComponentInfoType) {
-  const { type, props } = componentInfo;// 每个组件的信息从这里获取
+  const { type, props } = componentInfo; // 每个组件的信息从这里获取
   const componentConf = getComponentConfByType(type);
   if (componentConf == null) {
     return null;
@@ -20,7 +23,14 @@ function genComponent(componentInfo: ComponentInfoType) {
 }
 
 const EditCanvas: FC<PropsType> = ({ loading }) => {
-  const { componentList } = useGetComponentInfo();
+  const { componentList, selectedId } = useGetComponentInfo();
+  const dispatch = useDispatch();
+
+  // 点击组件时触发
+  function handleClick(id: string, event: MouseEvent) {
+    event.stopPropagation(); // 阻止事件冒泡
+    dispatch(changeSelectedId(id));
+  }
   console.log(componentList);
   if (loading)
     return (
@@ -33,8 +43,18 @@ const EditCanvas: FC<PropsType> = ({ loading }) => {
       {componentList.map((component) => {
         const { fe_id } = component;
 
+        const wrapperDefaultClassname = styles["component-wrapper"];
+        const selectedClassName = styles.selected;
+        const wrapperClassName = classNames({
+          [wrapperDefaultClassname]: true,
+          [selectedClassName]: fe_id === selectedId,
+        });
         return (
-          <div key={fe_id} className={styles["component-wrapper"]}>
+          <div
+            key={fe_id}
+            className={wrapperClassName}
+            onClick={(e) => handleClick(fe_id, e)}
+          >
             <div className={styles.component}>{genComponent(component)}</div>
           </div>
         );

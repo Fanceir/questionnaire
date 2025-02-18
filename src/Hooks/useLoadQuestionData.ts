@@ -16,11 +16,21 @@ function useLoadQuestionData() {
     { manual: true },
   );
   //根据获取的data 设置redux
+
+  // 获取默认的selectedId
+
+  //根据获取的data 设置redux
   useEffect(() => {
     if (!data) return;
     const { /*title = ""*/ componentList = [] } = data;
+
+    // 获取默认的selectedId
+    let selectedId = "";
+    if (componentList.length > 0) {
+      selectedId = componentList[0].fe_id; // 默认选中第一个组件
+    }
     // 把问卷的信息设置到redux中
-    dispatch(resetComponents({ componentList }));
+    dispatch(resetComponents({ componentList, selectedId }));
   }, [data, dispatch]);
   useEffect(() => {
     run(id);

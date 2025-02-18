@@ -33,7 +33,30 @@ export const componentSlice = createSlice({
     ) => {
       draft.selectedId = action.payload;
     },
+
+    // 添加新组件
+    addComponent: (
+      draft: ComponentStateType,
+      action: PayloadAction<ComponentInfoType>,
+    ) => {
+      const newComponent = action.payload;
+
+      //找到当前的id
+      const { selectedId } = draft;
+      const index = draft.componentList.findIndex(
+        (c) => c.fe_id === selectedId,
+      );
+      if (index < 0) {
+        //未选中任何组件，就在最后添加
+        draft.componentList.push(newComponent);
+      } else {
+        draft.componentList.splice(index + 1, 0, newComponent);
+      }
+      // 选中新添加的组件
+      draft.selectedId = newComponent.fe_id;
+    },
   },
 });
-export const { resetComponents, changeSelectedId } = componentSlice.actions;
+export const { resetComponents, changeSelectedId, addComponent } =
+  componentSlice.actions;
 export default componentSlice.reducer;

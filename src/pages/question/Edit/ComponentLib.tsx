@@ -6,18 +6,31 @@ import {
 import { Typography } from "antd";
 const { Title } = Typography;
 import styles from "./ComponentLib.module.scss";
-
-function genComponent(c: ComponentConfType) {
-  const { Component } = c;
-  return (
-    <div className={styles.wrapper}>
-      <Component />
-      <div className={styles.component}></div>
-    </div>
-  );
-}
+import { addComponent } from "@/store/componentReducer";
+import { nanoid } from "nanoid";
+import { useDispatch } from "react-redux";
 
 const ComponentLib: FC = () => {
+  const dispatch = useDispatch();
+  const genComponent = (c: ComponentConfType) => {
+    const { Component, defaultProps, title, type } = c;
+    const handleClick = () => {
+      dispatch(
+        addComponent({
+          fe_id: nanoid(),
+          type,
+          title,
+          props: defaultProps,
+        }),
+      );
+    };
+    return (
+      <div key={type} className={styles.wrapper} onClick={handleClick}>
+        <Component />
+        <div className={styles.component}></div>
+      </div>
+    );
+  };
   return (
     <div>
       {componentConfGroup.map((group, index) => {

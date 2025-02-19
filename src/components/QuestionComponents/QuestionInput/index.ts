@@ -1,6 +1,7 @@
 // input 组件的配置
 
 import Component from "./Component";
+import PropComponent from "./PropComponent";
 import { QuestionInputDefaultProps } from "./interface";
 export * from "./interface";
 
@@ -9,5 +10,6 @@ export default {
   title: "输入框",
   type: "questionInput", //注意和后端统一好
   Component,
+  PropComponent,
   defaultProps: QuestionInputDefaultProps,
 };

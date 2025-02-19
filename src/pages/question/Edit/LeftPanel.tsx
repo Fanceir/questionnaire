@@ -25,6 +25,6 @@ const LeftPanel: FC = () => {
       children: <div>图层</div>,
     },
   ];
-  return <Tabs defaultActiveKey="" items={tabsItems} />;
+  return <Tabs defaultActiveKey="componentLib" items={tabsItems} />;
 };
 export default LeftPanel;

@@ -17,7 +17,7 @@ const ComponentLib: FC = () => {
     const handleClick = () => {
       dispatch(
         addComponent({
-          fe_id: nanoid(),
+          fe_id: nanoid(), //这里就当作一个前端生成的id
           type,
           title,
           props: defaultProps,

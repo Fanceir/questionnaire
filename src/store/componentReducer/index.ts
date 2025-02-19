@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ComponentPropsType } from "@/components/QuestionComponents";
+import { produce } from "immer";
 export type ComponentInfoType = {
-  fe_id: string;
+  fe_id: string; //点击组件的时候是前端生成的id
   type: string;
   title: string;
   props: ComponentPropsType;
@@ -27,12 +28,11 @@ export const componentSlice = createSlice({
     },
 
     // 修改 selectedid
-    changeSelectedId: (
-      draft: ComponentStateType,
-      action: PayloadAction<string>,
-    ) => {
-      draft.selectedId = action.payload;
-    },
+    changeSelectedId: produce(
+      (draft: ComponentStateType, action: PayloadAction<string>) => {
+        draft.selectedId = action.payload;
+      },
+    ),
 
     // 添加新组件
     addComponent: (
@@ -55,8 +55,27 @@ export const componentSlice = createSlice({
       // 选中新添加的组件
       draft.selectedId = newComponent.fe_id;
     },
+    changeComponentProps: produce(
+      (
+        draft: ComponentStateType,
+        action: PayloadAction<{ fe_id: string; newProps: ComponentPropsType }>,
+      ) => {
+        const { fe_id, newProps } = action.payload;
+        const curComp = draft.componentList.find((c) => c.fe_id === fe_id);
+        if (curComp) {
+          curComp.props = {
+            ...curComp.props,
+            ...newProps,
+          };
+        }
+      },
+    ),
   },
 });
-export const { resetComponents, changeSelectedId, addComponent } =
-  componentSlice.actions;
+export const {
+  resetComponents,
+  changeSelectedId,
+  addComponent,
+  changeComponentProps,
+} = componentSlice.actions;
 export default componentSlice.reducer;

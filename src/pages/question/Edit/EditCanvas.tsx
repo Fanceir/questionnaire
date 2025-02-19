@@ -31,7 +31,6 @@ const EditCanvas: FC<PropsType> = ({ loading }) => {
     event.stopPropagation(); // 阻止事件冒泡
     dispatch(changeSelectedId(id));
   }
-  console.log(componentList);
   if (loading)
     return (
       <div style={{ textAlign: "center", marginTop: "24px" }}>

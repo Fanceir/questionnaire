@@ -17,7 +17,7 @@ import {
 } from "@/services/question";
 
 type QuestionCardProps = {
-  _id: string;
+  _id: string; //服务端使用的是mongodb，所以这里使用的是_id,而且不重复，所以这个可以交给服务端去实现
   title: string;
   isPublished: boolean;
   isStar: boolean;

@@ -1,10 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ComponentPropsType } from "@/components/QuestionComponents";
 import { produce } from "immer";
+import { getNextSelectedId } from "./utils";
 export type ComponentInfoType = {
   fe_id: string; //点击组件的时候是前端生成的id
   type: string;
   title: string;
+  isHidden?: boolean;
   props: ComponentPropsType;
 };
 export type ComponentStateType = {
@@ -70,6 +72,43 @@ export const componentSlice = createSlice({
         }
       },
     ),
+
+    //删除选中的组件
+    removeSelectedComponent: produce((draft: ComponentStateType) => {
+      const { selectedId: removeId, componentList } = draft;
+
+      //重新计算selectedId
+      const newSelectedId = getNextSelectedId(removeId, componentList);
+      draft.selectedId = newSelectedId;
+
+      const index = componentList.findIndex((c) => c.fe_id === removeId);
+      componentList.splice(index, 1);
+    }),
+
+    //隐藏和显示组件
+    changeComponentHidden: produce(
+      (
+        draft: ComponentStateType,
+        action: PayloadAction<{ fe_id: string; isHidden: boolean }>,
+      ) => {
+        const { componentList } = draft;
+        const { fe_id, isHidden } = action.payload;
+
+        //找到当前的id
+        let newSelectedId = "";
+        if (isHidden) {
+          newSelectedId = getNextSelectedId(fe_id, componentList);
+        } else {
+          newSelectedId = fe_id;
+        }
+        draft.selectedId = newSelectedId;
+
+        const curComp = componentList.find((c) => c.fe_id === fe_id);
+        if (curComp) {
+          curComp.isHidden = isHidden;
+        }
+      },
+    ),
   },
 });
 export const {
@@ -77,5 +116,7 @@ export const {
   changeSelectedId,
   addComponent,
   changeComponentProps,
+  removeSelectedComponent,
+  changeComponentHidden,
 } = componentSlice.actions;
 export default componentSlice.reducer;

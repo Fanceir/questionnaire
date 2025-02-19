@@ -1,3 +1,11 @@
+/*
+ * @Author: Fanceir fx_official@outlook.com
+ * @Date: 2025-02-15 15:01:08
+ * @LastEditors: Fanceir fx_official@outlook.com
+ * @LastEditTime: 2025-02-19 22:53:47
+ * @FilePath: /questionnaire/src/pages/question/Edit/EditCanvas.tsx
+ * @Description:
+ */
 import { FC, MouseEvent } from "react";
 import styles from "./EditCanvas.module.scss";
 import { getComponentConfByType } from "@/components/QuestionComponents";
@@ -39,25 +47,27 @@ const EditCanvas: FC<PropsType> = ({ loading }) => {
     );
   return (
     <div className={styles.EditCanvas}>
-      {componentList.map((component) => {
-        const { fe_id } = component;
+      {componentList
+        .filter((c) => !c.isHidden)
+        .map((component) => {
+          const { fe_id } = component;
 
-        const wrapperDefaultClassname = styles["component-wrapper"];
-        const selectedClassName = styles.selected;
-        const wrapperClassName = classNames({
-          [wrapperDefaultClassname]: true,
-          [selectedClassName]: fe_id === selectedId,
-        });
-        return (
-          <div
-            key={fe_id}
-            className={wrapperClassName}
-            onClick={(e) => handleClick(fe_id, e)}
-          >
-            <div className={styles.component}>{genComponent(component)}</div>
-          </div>
-        );
-      })}
+          const wrapperDefaultClassname = styles["component-wrapper"];
+          const selectedClassName = styles.selected;
+          const wrapperClassName = classNames({
+            [wrapperDefaultClassname]: true,
+            [selectedClassName]: fe_id === selectedId,
+          });
+          return (
+            <div
+              key={fe_id}
+              className={wrapperClassName}
+              onClick={(e) => handleClick(fe_id, e)}
+            >
+              <div className={styles.component}>{genComponent(component)}</div>
+            </div>
+          );
+        })}
     </div>
   );
 };

@@ -2,7 +2,7 @@
  * @Author: Fanceir fx_official@outlook.com
  * @Date: 2025-02-15 15:01:08
  * @LastEditors: Fanceir fx_official@outlook.com
- * @LastEditTime: 2025-02-19 22:53:47
+ * @LastEditTime: 2025-02-20 21:47:21
  * @FilePath: /questionnaire/src/pages/question/Edit/EditCanvas.tsx
  * @Description:
  */
@@ -50,13 +50,15 @@ const EditCanvas: FC<PropsType> = ({ loading }) => {
       {componentList
         .filter((c) => !c.isHidden)
         .map((component) => {
-          const { fe_id } = component;
+          const { fe_id, isLocked } = component;
 
           const wrapperDefaultClassname = styles["component-wrapper"];
           const selectedClassName = styles.selected;
+          const lockedClassName = styles.locked;
           const wrapperClassName = classNames({
             [wrapperDefaultClassname]: true,
             [selectedClassName]: fe_id === selectedId,
+            [lockedClassName]: isLocked,
           });
           return (
             <div

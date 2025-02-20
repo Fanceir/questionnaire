@@ -15,6 +15,10 @@
 .selected {
   border: 1px solid #1890ff !important;
 }
+.locked {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 .component {
   pointer-events: none; //
 }

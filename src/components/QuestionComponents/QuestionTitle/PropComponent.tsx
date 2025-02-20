@@ -1,10 +1,18 @@
+/*
+ * @Author: Fanceir fx_official@outlook.com
+ * @Date: 2025-02-19 14:01:58
+ * @LastEditors: Fanceir fx_official@outlook.com
+ * @LastEditTime: 2025-02-20 21:51:30
+ * @FilePath: /questionnaire/src/components/QuestionComponents/QuestionTitle/PropComponent.tsx
+ * @Description: 这个是标题组件的属性设置组件
+ */
 import { FC, useEffect } from "react";
 import { Form, Input, Checkbox, Select } from "antd";
 import { QuestionTitlePropsType } from "./interface";
 const PropComponent: FC<QuestionTitlePropsType> = (
   props: QuestionTitlePropsType,
 ) => {
-  const { text, level, isCenter, onChange } = props;
+  const { text, level, isCenter, onChange, disabled } = props;
   const [form] = Form.useForm();
   useEffect(() => {
     form.setFieldsValue({ text, level, isCenter });
@@ -20,6 +28,7 @@ const PropComponent: FC<QuestionTitlePropsType> = (
       initialValues={{ text, level, isCenter }}
       form={form}
       onValuesChange={handleValueChange}
+      disabled={disabled}
     >
       <Form.Item
         label="标题内容"

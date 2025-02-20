@@ -1,3 +1,11 @@
+/*
+ * @Author: Fanceir fx_official@outlook.com
+ * @Date: 2025-02-15 15:01:08
+ * @LastEditors: Fanceir fx_official@outlook.com
+ * @LastEditTime: 2025-02-20 22:02:49
+ * @FilePath: /questionnaire/src/Hooks/useLoadQuestionData.ts
+ * @Description:  用于加载问卷数据的hook
+ */
 import { getQuestionService } from "@/services/question";
 import { useParams } from "react-router-dom";
 import { useRequest } from "ahooks";
@@ -30,7 +38,9 @@ function useLoadQuestionData() {
       selectedId = componentList[0].fe_id; // 默认选中第一个组件
     }
     // 把问卷的信息设置到redux中
-    dispatch(resetComponents({ componentList, selectedId }));
+    dispatch(
+      resetComponents({ componentList, selectedId, copiedComponent: null }),
+    );
   }, [data, dispatch]);
   useEffect(() => {
     run(id);

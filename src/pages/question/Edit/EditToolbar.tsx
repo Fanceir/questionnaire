@@ -2,17 +2,21 @@
  * @Author: Fanceir fx_official@outlook.com
  * @Date: 2025-02-19 22:10:38
  * @LastEditors: Fanceir fx_official@outlook.com
- * @LastEditTime: 2025-02-20 21:46:13
+ * @LastEditTime: 2025-02-20 22:11:31
  * @FilePath: /questionnaire/src/pages/question/Edit/EditToolbar.tsx
  * @Description:
  */
 import useGetComponentInfo from "@/Hooks/useGetComponentInfo";
 import {
   changeComponentHidden,
+  copySelectedComponent,
+  pasteCopiedComponent,
   removeSelectedComponent,
   toogleComponentLock,
 } from "@/store/componentReducer";
 import {
+  BlockOutlined,
+  CopyOutlined,
   DeleteOutlined,
   EyeInvisibleOutlined,
   LockOutlined,
@@ -22,7 +26,8 @@ import { FC } from "react";
 import { useDispatch } from "react-redux";
 const EditToolbar: FC = () => {
   const dispatch = useDispatch();
-  const { selectedId, selectedComponent } = useGetComponentInfo();
+  const { selectedId, selectedComponent, copiedComponent } =
+    useGetComponentInfo();
   const { isLocked } = selectedComponent || {};
   function handleDelete() {
     dispatch(removeSelectedComponent());
@@ -32,6 +37,12 @@ const EditToolbar: FC = () => {
   }
   function handleLock() {
     dispatch(toogleComponentLock({ fe_id: selectedId }));
+  }
+  function handleCopy() {
+    dispatch(copySelectedComponent());
+  }
+  function handlePaste() {
+    dispatch(pasteCopiedComponent());
   }
   return (
     <>
@@ -56,6 +67,21 @@ const EditToolbar: FC = () => {
             icon={<LockOutlined />}
             onClick={handleLock}
             type={isLocked ? "primary" : "default"}
+          ></Button>
+        </Tooltip>
+        <Tooltip title="复制">
+          <Button
+            shape="circle"
+            icon={<CopyOutlined />}
+            onClick={handleCopy}
+          ></Button>
+        </Tooltip>
+        <Tooltip title="粘贴">
+          <Button
+            shape="circle"
+            icon={<BlockOutlined />}
+            onClick={handlePaste}
+            disabled={copiedComponent == null}
           ></Button>
         </Tooltip>
       </Space>

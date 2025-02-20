@@ -2,20 +2,19 @@
  * @Author: Fanceir fx_official@outlook.com
  * @Date: 2025-02-15 15:01:08
  * @LastEditors: Fanceir fx_official@outlook.com
- * @LastEditTime: 2025-02-20 21:47:21
+ * @LastEditTime: 2025-02-20 22:19:05
  * @FilePath: /questionnaire/src/pages/question/Edit/EditCanvas.tsx
- * @Description:
+ * @Description: 编辑画布的页面
  */
 import { FC, MouseEvent } from "react";
 import styles from "./EditCanvas.module.scss";
 import { getComponentConfByType } from "@/components/QuestionComponents";
 import useGetComponentInfo from "@/Hooks/useGetComponentInfo";
-// 临时引入
 import { changeSelectedId, ComponentInfoType } from "@/store/componentReducer";
 import { Spin } from "antd";
 import { useDispatch } from "react-redux";
 import classNames from "classnames";
-
+import useBindCanvasKeyPress from "@/Hooks/useBindCanvasKeyPress";
 type PropsType = {
   loading: boolean;
 };
@@ -39,6 +38,11 @@ const EditCanvas: FC<PropsType> = ({ loading }) => {
     event.stopPropagation(); // 阻止事件冒泡
     dispatch(changeSelectedId(id));
   }
+
+  // 绑定画布按键事件
+  useBindCanvasKeyPress();
+
+  // 如果加载中，显示加载中的图标
   if (loading)
     return (
       <div style={{ textAlign: "center", marginTop: "24px" }}>

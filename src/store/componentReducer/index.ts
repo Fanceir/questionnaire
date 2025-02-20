@@ -1,7 +1,8 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
 import { ComponentPropsType } from "@/components/QuestionComponents";
 import { produce } from "immer";
-import { getNextSelectedId } from "./utils";
+import { getNextSelectedId, insertNewComponent } from "./utils";
+import cloneDeep from "lodash.clonedeep";
 export type ComponentInfoType = {
   fe_id: string; //点击组件的时候是前端生成的id
   type: string;
@@ -13,10 +14,12 @@ export type ComponentInfoType = {
 export type ComponentStateType = {
   selectedId: string;
   componentList: Array<ComponentInfoType>;
+  copiedComponent: ComponentInfoType | null;
 };
 const INIT_STATE: ComponentStateType = {
   selectedId: "",
   componentList: [],
+  copiedComponent: null,
 };
 export const componentSlice = createSlice({
   name: "components",
@@ -43,20 +46,7 @@ export const componentSlice = createSlice({
       action: PayloadAction<ComponentInfoType>,
     ) => {
       const newComponent = action.payload;
-
-      //找到当前的id
-      const { selectedId } = draft;
-      const index = draft.componentList.findIndex(
-        (c) => c.fe_id === selectedId,
-      );
-      if (index < 0) {
-        //未选中任何组件，就在最后添加
-        draft.componentList.push(newComponent);
-      } else {
-        draft.componentList.splice(index + 1, 0, newComponent);
-      }
-      // 选中新添加的组件
-      draft.selectedId = newComponent.fe_id;
+      insertNewComponent(draft, newComponent);
     },
     changeComponentProps: produce(
       (
@@ -121,6 +111,45 @@ export const componentSlice = createSlice({
         }
       },
     ),
+
+    //复制当前选中的组件
+    copySelectedComponent: produce((draft: ComponentStateType) => {
+      const { selectedId, componentList } = draft;
+      const curComp = componentList.find((c) => c.fe_id === selectedId);
+      if (curComp == null) return;
+      if (curComp) {
+        draft.copiedComponent = cloneDeep(curComp);
+      }
+    }),
+
+    // 粘贴组件
+    pasteCopiedComponent: produce((draft: ComponentStateType) => {
+      const { copiedComponent } = draft;
+      if (copiedComponent == null) return;
+      const newComponent = cloneDeep(copiedComponent);
+      newComponent.fe_id = nanoid();
+      insertNewComponent(draft, newComponent);
+    }),
+
+    //选中上一个
+    selectPrevComponent: produce((draft: ComponentStateType) => {
+      const { selectedId, componentList } = draft;
+      const index = componentList.findIndex((c) => c.fe_id === selectedId);
+      if (index < 0) return;
+      if (index === 0) return;
+      draft.selectedId = componentList[index - 1].fe_id;
+    }),
+
+    //选中下一个
+    selectNextComponent: produce((draft: ComponentStateType) => {
+      const { selectedId, componentList } = draft;
+      const index = componentList.findIndex((c) => c.fe_id === selectedId);
+      if (index < 0) return;
+      if (index === componentList.length - 1) return;
+      draft.selectedId = componentList[index + 1].fe_id;
+    }),
+
+    //TODO: 撤销重做
   },
 });
 export const {
@@ -131,5 +160,9 @@ export const {
   removeSelectedComponent,
   changeComponentHidden,
   toogleComponentLock,
+  copySelectedComponent,
+  pasteCopiedComponent,
+  selectPrevComponent,
+  selectNextComponent,
 } = componentSlice.actions;
 export default componentSlice.reducer;

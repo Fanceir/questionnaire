@@ -2,7 +2,7 @@
  * @Author: Fanceir fx_official@outlook.com
  * @Date: 2025-02-16 21:10:18
  * @LastEditors: Fanceir fx_official@outlook.com
- * @LastEditTime: 2025-02-21 13:03:27
+ * @LastEditTime: 2025-02-21 23:24:13
  * @FilePath: /questionnaire/src/components/QuestionComponents/index.ts
  * @Description: 组件配置
  */
@@ -12,10 +12,12 @@ import QuestionTitleConf, { QuestionTitlePropsType } from "./QuestionTitle";
 import QuestionParagraphConf, {
   QuestionParagraphPropsType,
 } from "./QuestionParagraph";
+import QuestionInfoConf, { QuestionInfoPropsType } from "./QuestionInfo";
 // 各个组件的类型
 export type ComponentPropsType = QuestionInputPropsType &
   QuestionTitlePropsType &
-  QuestionParagraphPropsType;
+  QuestionParagraphPropsType &
+  QuestionInfoPropsType;
 
 //统一组件的配置的type
 export type ComponentConfType = {
@@ -31,6 +33,7 @@ const componentConfList: ComponentConfType[] = [
   QuestionInputConf,
   QuestionTitleConf,
   QuestionParagraphConf,
+  QuestionInfoConf,
 ];
 
 // 根据组件类型获取组件配置
@@ -54,5 +57,10 @@ export const componentConfGroup = [
     groupId: "paragraph",
     groupName: "段落",
     components: [QuestionParagraphConf],
+  },
+  {
+    groupId: "info",
+    groupName: "信息",
+    components: [QuestionInfoConf],
   },
 ];

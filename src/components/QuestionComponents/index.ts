@@ -2,7 +2,7 @@
  * @Author: Fanceir fx_official@outlook.com
  * @Date: 2025-02-16 21:10:18
  * @LastEditors: Fanceir fx_official@outlook.com
- * @LastEditTime: 2025-02-21 23:24:13
+ * @LastEditTime: 2025-02-22 19:26:57
  * @FilePath: /questionnaire/src/components/QuestionComponents/index.ts
  * @Description: 组件配置
  */
@@ -13,11 +13,15 @@ import QuestionParagraphConf, {
   QuestionParagraphPropsType,
 } from "./QuestionParagraph";
 import QuestionInfoConf, { QuestionInfoPropsType } from "./QuestionInfo";
+import QuestionTextAreaConf, {
+  QuestionTextAreaPropsType,
+} from "./QuestionTextArea";
 // 各个组件的类型
 export type ComponentPropsType = QuestionInputPropsType &
   QuestionTitlePropsType &
   QuestionParagraphPropsType &
-  QuestionInfoPropsType;
+  QuestionInfoPropsType &
+  QuestionTextAreaPropsType;
 
 //统一组件的配置的type
 export type ComponentConfType = {
@@ -34,6 +38,7 @@ const componentConfList: ComponentConfType[] = [
   QuestionTitleConf,
   QuestionParagraphConf,
   QuestionInfoConf,
+  QuestionTextAreaConf,
 ];
 
 // 根据组件类型获取组件配置
@@ -62,5 +67,10 @@ export const componentConfGroup = [
     groupId: "info",
     groupName: "信息",
     components: [QuestionInfoConf],
+  },
+  {
+    groupId: "textarea",
+    groupName: "多行输入",
+    components: [QuestionTextAreaConf],
   },
 ];

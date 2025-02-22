@@ -2,7 +2,7 @@
  * @Author: Fanceir fx_official@outlook.com
  * @Date: 2025-02-16 21:10:18
  * @LastEditors: Fanceir fx_official@outlook.com
- * @LastEditTime: 2025-02-22 19:26:57
+ * @LastEditTime: 2025-02-22 22:58:13
  * @FilePath: /questionnaire/src/components/QuestionComponents/index.ts
  * @Description: 组件配置
  */
@@ -16,12 +16,14 @@ import QuestionInfoConf, { QuestionInfoPropsType } from "./QuestionInfo";
 import QuestionTextAreaConf, {
   QuestionTextAreaPropsType,
 } from "./QuestionTextArea";
+import QuestionRadioConf, { QuestionRadioPropsType } from "./QuestionRadio";
 // 各个组件的类型
 export type ComponentPropsType = QuestionInputPropsType &
   QuestionTitlePropsType &
   QuestionParagraphPropsType &
   QuestionInfoPropsType &
-  QuestionTextAreaPropsType;
+  QuestionTextAreaPropsType &
+  QuestionRadioPropsType;
 
 //统一组件的配置的type
 export type ComponentConfType = {
@@ -39,6 +41,7 @@ const componentConfList: ComponentConfType[] = [
   QuestionParagraphConf,
   QuestionInfoConf,
   QuestionTextAreaConf,
+  QuestionRadioConf,
 ];
 
 // 根据组件类型获取组件配置
@@ -51,26 +54,16 @@ export const componentConfGroup = [
   {
     groupId: "text",
     groupName: "文本显示",
-    components: [QuestionTitleConf],
+    components: [QuestionTitleConf, QuestionInfoConf, QuestionParagraphConf],
   },
   {
     groupId: "input",
-    groupName: "文本输入",
-    components: [QuestionInputConf],
+    groupName: "用户输入",
+    components: [QuestionInputConf, QuestionTextAreaConf],
   },
   {
-    groupId: "paragraph",
-    groupName: "段落",
-    components: [QuestionParagraphConf],
-  },
-  {
-    groupId: "info",
-    groupName: "信息",
-    components: [QuestionInfoConf],
-  },
-  {
-    groupId: "textarea",
-    groupName: "多行输入",
-    components: [QuestionTextAreaConf],
+    groupId: "radio",
+    groupName: "用户选择",
+    components: [QuestionRadioConf],
   },
 ];

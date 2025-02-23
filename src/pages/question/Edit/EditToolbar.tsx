@@ -2,7 +2,7 @@
  * @Author: Fanceir fx_official@outlook.com
  * @Date: 2025-02-19 22:10:38
  * @LastEditors: Fanceir fx_official@outlook.com
- * @LastEditTime: 2025-02-20 22:11:31
+ * @LastEditTime: 2025-02-23 15:24:51
  * @FilePath: /questionnaire/src/pages/question/Edit/EditToolbar.tsx
  * @Description:
  */
@@ -12,7 +12,7 @@ import {
   copySelectedComponent,
   pasteCopiedComponent,
   removeSelectedComponent,
-  toogleComponentLock,
+  toggleComponentLock,
 } from "@/store/componentReducer";
 import {
   BlockOutlined,
@@ -36,7 +36,7 @@ const EditToolbar: FC = () => {
     dispatch(changeComponentHidden({ fe_id: selectedId, isHidden: true }));
   }
   function handleLock() {
-    dispatch(toogleComponentLock({ fe_id: selectedId }));
+    dispatch(toggleComponentLock({ fe_id: selectedId }));
   }
   function handleCopy() {
     dispatch(copySelectedComponent());

@@ -102,7 +102,7 @@ export const componentSlice = createSlice({
     ),
 
     //锁定和解锁组件
-    toogleComponentLock: produce(
+    toggleComponentLock: produce(
       (draft: ComponentStateType, action: PayloadAction<{ fe_id: string }>) => {
         const { fe_id } = action.payload;
         const curComp = draft.componentList.find((c) => c.fe_id === fe_id);
@@ -149,6 +149,20 @@ export const componentSlice = createSlice({
       draft.selectedId = componentList[index + 1].fe_id;
     }),
 
+    //修改组件标题
+    changeComponentTitle: produce(
+      (
+        draft: ComponentStateType,
+        action: PayloadAction<{ fe_id: string; title: string }>,
+      ) => {
+        const { fe_id, title } = action.payload;
+        const curComp = draft.componentList.find((c) => c.fe_id === fe_id);
+        if (curComp) {
+          curComp.title = title;
+        }
+      },
+    ),
+
     //TODO: 撤销重做
   },
 });
@@ -159,10 +173,11 @@ export const {
   changeComponentProps,
   removeSelectedComponent,
   changeComponentHidden,
-  toogleComponentLock,
+  toggleComponentLock,
   copySelectedComponent,
   pasteCopiedComponent,
   selectPrevComponent,
   selectNextComponent,
+  changeComponentTitle,
 } = componentSlice.actions;
 export default componentSlice.reducer;

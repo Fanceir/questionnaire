@@ -6,7 +6,7 @@
  * @FilePath: /questionnaire/src/store/pageInfoReducer.ts
  * @Description:  页面属性的reducer
  */
-
+import { produce } from "immer";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 // import { produce } from "immer";
 export type PageInfoType = {
@@ -34,8 +34,13 @@ const pageInfoSlice = createSlice({
       state = action.payload;
       return state;
     },
+    changePageTitle: produce(
+      (draft: PageInfoType, action: PayloadAction<string>) => {
+        draft.title = action.payload;
+      },
+    ),
   },
 });
-export const { resetPageInfo } = pageInfoSlice.actions;
+export const { resetPageInfo,changePageTitle } = pageInfoSlice.actions;
 
 export default pageInfoSlice.reducer;

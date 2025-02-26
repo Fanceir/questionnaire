@@ -23,6 +23,7 @@ import { useDispatch } from "react-redux";
 function isActiveElementEditable() {
   const activeEl = document.activeElement;
   if (activeEl === document.body) return true;
+  if (activeEl?.matches("div[role='button']")) return true;
   return false;
 }
 function useBindCanvasKeyPress() {

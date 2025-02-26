@@ -3,6 +3,7 @@ import { ComponentPropsType } from "@/components/QuestionComponents";
 import { produce } from "immer";
 import { getNextSelectedId, insertNewComponent } from "./utils";
 import cloneDeep from "lodash.clonedeep";
+import { arrayMove } from "@dnd-kit/sortable";
 export type ComponentInfoType = {
   fe_id: string; //点击组件的时候是前端生成的id
   type: string;
@@ -163,6 +164,18 @@ export const componentSlice = createSlice({
       },
     ),
 
+    //移动组件位置
+    moveComponent: produce(
+      (
+        draft: ComponentStateType,
+        action: PayloadAction<{ oldIndex: number; newIndex: number }>,
+      ) => {
+        const { componentList: curComponentList } = draft;
+        const { oldIndex, newIndex } = action.payload;
+        draft.componentList = arrayMove(curComponentList, oldIndex, newIndex);
+      },
+    ),
+
     //TODO: 撤销重做
   },
 });
@@ -179,5 +192,6 @@ export const {
   selectPrevComponent,
   selectNextComponent,
   changeComponentTitle,
+  moveComponent,
 } = componentSlice.actions;
 export default componentSlice.reducer;

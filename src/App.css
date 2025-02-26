@@ -1,0 +1,4 @@
+/* dnd-kit加一个样式 */
+div[role="button"] {
+  outline: 0;
+}

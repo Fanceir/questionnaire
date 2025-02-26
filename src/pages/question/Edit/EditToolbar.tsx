@@ -10,6 +10,7 @@ import useGetComponentInfo from "@/Hooks/useGetComponentInfo";
 import {
   changeComponentHidden,
   copySelectedComponent,
+  moveComponent,
   pasteCopiedComponent,
   removeSelectedComponent,
   toggleComponentLock,
@@ -18,17 +19,27 @@ import {
   BlockOutlined,
   CopyOutlined,
   DeleteOutlined,
+  DownOutlined,
   EyeInvisibleOutlined,
   LockOutlined,
+  UpOutlined,
 } from "@ant-design/icons";
 import { Button, Space, Tooltip } from "antd";
 import { FC } from "react";
 import { useDispatch } from "react-redux";
 const EditToolbar: FC = () => {
   const dispatch = useDispatch();
-  const { selectedId, selectedComponent, copiedComponent } =
-    useGetComponentInfo();
+  const {
+    selectedId,
+    componentList = [],
+    selectedComponent,
+    copiedComponent,
+  } = useGetComponentInfo();
   const { isLocked } = selectedComponent || {};
+  const length = componentList.length;
+  const selectedIndex = componentList.findIndex((c) => c.fe_id === selectedId);
+  const isFirst = selectedIndex === 0;
+  const isLast = selectedIndex === length - 1;
   function handleDelete() {
     dispatch(removeSelectedComponent());
   }
@@ -44,6 +55,26 @@ const EditToolbar: FC = () => {
   function handlePaste() {
     dispatch(pasteCopiedComponent());
   }
+  function handleUp() {
+    if (isFirst) return;
+    dispatch(
+      moveComponent({
+        oldIndex: selectedIndex,
+        newIndex: selectedIndex - 1,
+      }),
+    );
+  }
+
+  function handleDown() {
+    if (isLast) return;
+    dispatch(
+      moveComponent({
+        oldIndex: selectedIndex,
+        newIndex: selectedIndex + 1,
+      }),
+    );
+  }
+
   return (
     <>
       <Space>
@@ -82,6 +113,22 @@ const EditToolbar: FC = () => {
             icon={<BlockOutlined />}
             onClick={handlePaste}
             disabled={copiedComponent == null}
+          ></Button>
+        </Tooltip>
+        <Tooltip title="上移">
+          <Button
+            shape="circle"
+            icon={<UpOutlined />}
+            onClick={handleUp}
+            disabled={isFirst}
+          ></Button>
+        </Tooltip>
+        <Tooltip title="下移">
+          <Button
+            shape="circle"
+            icon={<DownOutlined rotate={180} />}
+            onClick={handleDown}
+            disabled={isLast}
           ></Button>
         </Tooltip>
       </Space>

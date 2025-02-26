@@ -15,6 +15,7 @@ import {
   removeSelectedComponent,
   toggleComponentLock,
 } from "@/store/componentReducer";
+import { ActionCreators as UndoActionCreators } from "redux-undo";
 import {
   BlockOutlined,
   CopyOutlined,
@@ -22,7 +23,9 @@ import {
   DownOutlined,
   EyeInvisibleOutlined,
   LockOutlined,
+  UndoOutlined,
   UpOutlined,
+  RedoOutlined,
 } from "@ant-design/icons";
 import { Button, Space, Tooltip } from "antd";
 import { FC } from "react";
@@ -74,7 +77,12 @@ const EditToolbar: FC = () => {
       }),
     );
   }
-
+  function handleUndo() {
+    dispatch(UndoActionCreators.undo());
+  }
+  function handleRedo() {
+    dispatch(UndoActionCreators.redo());
+  }
   return (
     <>
       <Space>
@@ -129,6 +137,20 @@ const EditToolbar: FC = () => {
             icon={<DownOutlined rotate={180} />}
             onClick={handleDown}
             disabled={isLast}
+          ></Button>
+        </Tooltip>
+        <Tooltip title="撤销">
+          <Button
+            shape="circle"
+            icon={<UndoOutlined rotate={180} />}
+            onClick={handleUndo}
+          ></Button>
+        </Tooltip>
+        <Tooltip title="重做">
+          <Button
+            shape="circle"
+            icon={<RedoOutlined rotate={180} />}
+            onClick={handleRedo}
           ></Button>
         </Tooltip>
       </Space>

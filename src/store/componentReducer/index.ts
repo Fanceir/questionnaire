@@ -175,8 +175,6 @@ export const componentSlice = createSlice({
         draft.componentList = arrayMove(curComponentList, oldIndex, newIndex);
       },
     ),
-
-    //TODO: 撤销重做
   },
 });
 export const {

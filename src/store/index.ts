@@ -10,16 +10,25 @@ import { configureStore } from "@reduxjs/toolkit";
 import userReducer, { UserStateType } from "./userReducer";
 import componentReducer, { ComponentStateType } from "./componentReducer";
 import pageInfoReducer, { PageInfoType } from "./pageInfoReducer";
+import undoable, { excludeAction, StateWithHistory } from "redux-undo";
 export type StateType = {
   user: UserStateType;
-  components: ComponentStateType;
+  components: StateWithHistory<ComponentStateType>; //增加了undo类型
   pageInfo: PageInfoType;
 };
 export default configureStore({
   reducer: {
     user: userReducer,
     //组件列表的数据（UNDO REDO）
-    components: componentReducer,
+    components: undoable(componentReducer, {
+      limit: 20,
+      filter: excludeAction([
+        "components/resetComponents",
+        "components/changeSelectedId",
+        "components/selectPrevComponent",
+        "components/selectNextComponent",
+      ]),
+    }),
     pageInfo: pageInfoReducer,
   },
 });

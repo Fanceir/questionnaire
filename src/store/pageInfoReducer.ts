@@ -41,6 +41,6 @@ const pageInfoSlice = createSlice({
     ),
   },
 });
-export const { resetPageInfo,changePageTitle } = pageInfoSlice.actions;
+export const { resetPageInfo, changePageTitle } = pageInfoSlice.actions;
 
 export default pageInfoSlice.reducer;

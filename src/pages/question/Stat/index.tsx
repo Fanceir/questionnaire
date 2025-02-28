@@ -5,6 +5,7 @@ import useGetPageInfo from "@/Hooks/useGetPageInfo";
 import { useNavigate } from "react-router-dom";
 import { useTitle } from "ahooks";
 import styles from "./index.module.scss";
+import StatHeader from "./StatHeader";
 
 const Stat: FC = () => {
   useTitle("问卷统计");
@@ -46,7 +47,9 @@ const Stat: FC = () => {
 
   return (
     <div className={styles.container}>
-      <div>header</div>
+      <div>
+        <StatHeader />
+      </div>
       <div className={styles["content-wrapper"]}>
         {loading && LoadingElem}
         <div className={styles.content}>{genContentElem()}</div>

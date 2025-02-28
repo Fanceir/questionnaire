@@ -31,7 +31,14 @@ function useLoadQuestionData() {
   //根据获取的data 设置redux
   useEffect(() => {
     if (!data) return;
-    const { title = "", desc = "", js = "", css = "", componentList } = data; //解构
+    const {
+      title = "",
+      desc = "",
+      js = "",
+      css = "",
+      componentList,
+      isPublished,
+    } = data; //解构
 
     // 获取默认的selectedId
     let selectedId = "";
@@ -44,7 +51,7 @@ function useLoadQuestionData() {
     );
 
     // 把问卷的信息设置到redux中
-    dispatch(resetPageInfo({ title, desc, js, css }));
+    dispatch(resetPageInfo({ title, desc, js, css, isPublished }));
   }, [data, dispatch]);
   useEffect(() => {
     run(id);

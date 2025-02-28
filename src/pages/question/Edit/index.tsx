@@ -1,5 +1,4 @@
 import { FC } from "react";
-import styles from "./index.module.scss";
 import EditCanvas from "./EditCanvas";
 import useLoadQuestionData from "@/Hooks/useLoadQuestionData";
 import { useDispatch } from "react-redux";
@@ -7,13 +6,15 @@ import { changeSelectedId } from "@/store/componentReducer";
 import LeftPanel from "./LeftPanel";
 import RightPanel from "./RightPanel";
 import EditHeader from "./EditHeader";
-
+import { useTitle } from "ahooks";
+import styles from "./index.module.scss";
 const Edit: FC = () => {
   const { loading } = useLoadQuestionData();
   const dispatch = useDispatch();
   function clearSelectedId() {
     dispatch(changeSelectedId(""));
   }
+  useTitle(`编辑问卷 - 问卷编辑器`);
   return (
     <div className={styles.container}>
       <div>

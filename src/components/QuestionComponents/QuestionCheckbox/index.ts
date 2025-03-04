@@ -8,6 +8,7 @@
  */
 import Component from "../QuestionCheckbox/Component";
 import PropComponent from "./PropComponent";
+import StatComponent from "./StatComponent";
 import { QuesitonCheckboxDefaultProps } from "./interface";
 export * from "./interface";
 export default {
@@ -15,5 +16,6 @@ export default {
   type: "questionCheckbox",
   Component,
   PropComponent,
+  StatComponent,
   defaultProps: QuesitonCheckboxDefaultProps,
 };

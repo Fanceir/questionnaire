@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useCallback } from "react";
 import {
   componentConfGroup,
   ComponentConfType,
@@ -12,9 +12,9 @@ import { useDispatch } from "react-redux";
 
 const ComponentLib: FC = () => {
   const dispatch = useDispatch();
-  const genComponent = (c: ComponentConfType) => {
-    const { Component, defaultProps, title, type } = c;
-    const handleClick = () => {
+  const handleClick = useCallback(
+    (c: ComponentConfType) => {
+      const { defaultProps, title, type } = c;
       dispatch(
         addComponent({
           fe_id: nanoid(), //这里就当作一个前端生成的id
@@ -23,14 +23,19 @@ const ComponentLib: FC = () => {
           props: defaultProps,
         }),
       );
-    };
+    },
+    [dispatch],
+  );
+
+  function genComponent(c: ComponentConfType) {
+    const { Component, type } = c;
     return (
-      <div key={type} className={styles.wrapper} onClick={handleClick}>
+      <div key={type} className={styles.wrapper} onClick={() => handleClick(c)}>
         <Component />
         <div className={styles.component}></div>
       </div>
     );
-  };
+  }
   return (
     <div>
       {componentConfGroup.map((group, index) => {

@@ -1,4 +1,4 @@
-import { FC, useRef } from "react";
+import { FC, useMemo, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styles from "./StatHeader.module.scss";
 import {
@@ -39,7 +39,8 @@ const StatHeader: FC = () => {
         console.error("无法复制文本: ", err);
       });
   }
-  function genLinkAndQRcode() {
+  //使用useMemo 优化 因为不是经常变化，所以缓存起来
+  const LinkAndQRCodeElem = useMemo(() => {
     if (!isPublished) return null;
     const url = `http://localhost:3000/question/${id}`;
     //拼接url 参考c端的要求
@@ -60,7 +61,7 @@ const StatHeader: FC = () => {
         </Popover>
       </Space>
     );
-  }
+  }, [id, isPublished]);
   return (
     <div className={styles["header-wrapper"]}>
       <div className={styles.header}>
@@ -72,7 +73,7 @@ const StatHeader: FC = () => {
             <Title>{title}</Title>
           </Space>
         </div>
-        <div className={styles.main}>{genLinkAndQRcode()}</div>
+        <div className={styles.main}>{LinkAndQRCodeElem}</div>
         <div className={styles.right}>
           <Button type="primary" onClick={() => nav(`/question/edit/${id}`)}>
             编辑问卷

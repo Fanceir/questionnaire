@@ -9,8 +9,11 @@ import NotFound from "@/pages/NotFound";
 import List from "@/pages/manage/List";
 import Star from "@/pages/manage/Star";
 import Trash from "@/pages/manage/Trash";
-import Edit from "@/pages/question/Edit";
-import Stat from "@/pages/question/Stat";
+
+//拆分bundle 优化首页
+import { lazy } from "react";
+const Edit = lazy(() => import("@/pages/question/Edit"));
+const Stat = lazy(() => import("@/pages/question/Stat"));
 
 const router = createBrowserRouter([
   {

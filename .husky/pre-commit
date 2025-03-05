@@ -1,3 +1,4 @@
 #!/bin/sh
 npx eslint . --fix
 npx prettier --write .
+pnpm run test

@@ -24,9 +24,9 @@ export const QuesitonCheckboxDefaultProps: QuestionCheckboxPropsType = {
   title: "多选标题",
   isVertical: false,
   list: [
-    { value: "1", text: "选项1", checked: false },
-    { value: "2", text: "选项2", checked: false },
-    { value: "3", text: "选项3", checked: false },
+    { value: "item1", text: "选项1", checked: false },
+    { value: "item2", text: "选项2", checked: false },
+    { value: "item3", text: "选项3", checked: false },
   ],
 };
 export type QuestionCheckboxStatPropsType = {
